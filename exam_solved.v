@@ -3,7 +3,13 @@ Require Export UniMath.Foundations.All.
 
 (* Instructions: there are 10 exercises. Succesfully completing x exercises will earn you a grade of x. (No partial credit will be given.) Please alter the following comment to tell me which exercises you completed below.*)
 
-(* I completed 3 exercises: Exercise 1, 3, 4.*)
+(* I completed 3 exercises: Exercise 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 .*)
+
+(* In exercises 7 and 10 I used some theorems and definitions from the library.
+In excercise 8 I used functional extensionality *)
+
+(* I removed lines with Search, About, Locate and Print
+which I used along the process. *)
 
 (* Exercise 1 *)
 
@@ -14,10 +20,6 @@ Defined.
 
 (* Exercise 2 *)
 
-(*
-Locate "@".
-*)
-
 Lemma path_combination {A : UU} {a a' b : A} (p : a = b) (q: a' = b) : a = a'.
 (* Another way to combine paths. *)
 Proof.
@@ -25,8 +27,6 @@ Proof.
   symmetry.
   apply ( pathscomp0 q p).
 Defined.
-
-(* About idpath. *)
 
 (* Exercise 3 *)
 
@@ -65,9 +65,6 @@ Defined.
 
 (* Exercise 6 *)
 
-(*
-Search (forall X Y : UU, forall f : X -> Y, forall x y : X, x = y -> (f x) = (f y)).
-*)
 (* This command searches the library for functions of this kind. You should see in the output that ~maponpaths~ is of this kind. You can then print ~maponpaths~ (i.e. write "Print maponpaths.") to see the definition.
 
 You can use this to find other lemmas from the library. You can use any facts without proof from the library about addition and multiplication as well as ~maponpaths~.*)
@@ -106,12 +103,13 @@ Defined.
 Lemma prop_thm_right {P : UU} : (forall x y : P, x = y) -> isaprop P.
 Proof.
   intros pred_con.
-  (* Search (_ -> isaprop _). *)
-  (* Search (_ -> iscontr _). *)
   assert (P -> iscontr P).
-  (* Can use iscontraprop1inv: ∏ {X : UU}, (X → iscontr X) → isaprop X *)
   intro t.
+  (* This is a definition from the library *)
   exact (make_iscontr t (λ p : P, pred_con p t)).
+  (* iscontraprop1inv is a theorem in the library,
+  which allowed me to prove this theorem in a more elegant way.
+  *)
   apply iscontraprop1inv.
   assumption.
 Defined.
@@ -128,15 +126,6 @@ Defined.
 
 (* Show that the dependent product type former commutes with `isaprop`.*)
 
-(*
-Print isaprop.
-Print isofhlevel.
-Print iscontr.
-Print funextfun.
-Print funextsec.
-Locate "~".
-*)
-
 Theorem prop_commutes_Π {A : UU} {B : A -> UU} (p : forall x : A, isaprop (B x)) : isaprop (forall x : A, (B x)).
 Proof.
   apply prop_thm.
@@ -150,31 +139,18 @@ Proof.
     exact (p x).
   - apply funextsec.
     exact H.
-  (* there might be a way to prove this in a simpler way, I might try to prove it later *)
+
+  (*
+  There might be a way to prove this in a simpler way,
+  without functional extensionality. But I am not 100% sure.
+  *)
 Defined.
 
 (* Exercise 9 *)
 
 (* Show that isweq f is a proposition. *)
 
-(* Use ~isapropisofhlevel~ from the library.
-Compute isofhlevel 0.
-
-About isapropisofhlevel.
-Print isapropisweq.
-Print isapropiscontr.
-About impred.
-About hfiber.
-*)
-
-(*
-
-Search isaprop (isweq _).
-
-isapropisofhlevel : \u220f (n : nat) (X : UU), isaprop (isofhlevel n X)
-
-Compute (isofhlevel 1 (isweq _)).
-*)
+(* Use ~isapropisofhlevel~ from the library. *)
 
 Theorem isweq_is_prop {A B : UU} (f : A -> B) : isaprop (isweq f).
 Proof.
@@ -182,19 +158,22 @@ Proof.
   apply prop_commutes_Π.
   (* adds the arbitrary type *)
   intro t.
-  apply isapropiscontr.
+  use (isapropisofhlevel 0).
+  (*
+  I found that isapropiscontr, which is less strong,
+  can also be applied to prove this theorem
+  *)
 Defined.
 
 (* Exercise 10 *)
 
 (* You are allowed to use isweq_iso from the library in this proof: it says if f is a quasiequivalence, then f is an equivalence in that sense.*)
 
-(* 
-About isweq_iso.
-About hProp.
-About invmap.
+(*
+Did not find a way to apply isweq_iso,
+but found few definitions and theorems
+that allowed me to prove it.
 *)
-
 
 Lemma prop_weq_impl_prop_equiv (P Q : hProp) : (weq P Q) -> (P <-> Q).
   intro eq.
@@ -203,11 +182,7 @@ Lemma prop_weq_impl_prop_equiv (P Q : hProp) : (weq P Q) -> (P <-> Q).
   split.
   - exact f.
   - intros q.
-    (* Search (isweq _). *)
-    (* Search make_weq *)
     set (neweq := make_weq f pred).
-    (* Search weq. *)
-    (* About invweq. *)
     set ( newinveq := invweq neweq ).
     exact (newinveq q).
 Defined.
@@ -215,7 +190,6 @@ Defined.
 Lemma prop_weq_consequence_prop_equiv (P Q : hProp) : (P <-> Q) -> (weq P Q).
   intros H.
 
-  (* try to advance manipulating terms *)
   set (p := pr1 P).
   set (q := pr1 Q).
   set (pf := pr2 P).
