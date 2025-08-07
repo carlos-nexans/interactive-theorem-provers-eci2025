@@ -3,13 +3,12 @@ Require Export UniMath.Foundations.All.
 
 (* Instructions: there are 10 exercises. Succesfully completing x exercises will earn you a grade of x. (No partial credit will be given.) Please alter the following comment to tell me which exercises you completed below.*)
 
-(* I completed 3 exercises: Exercise 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 .*)
+(* I completed 10 (see notes below) exercises: Exercise 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 .*)
 
 (* In exercises 7 and 10 I used some theorems and definitions from the library.
-In excercise 8 I used functional extensionality *)
+In exercise 8 I used functional extensionality *)
 
-(* I removed lines with Search, About, Locate and Print
-which I used along the process. *)
+(* I removed lines with Search, About, Locate and Print I used *)
 
 (* Exercise 1 *)
 
@@ -108,7 +107,7 @@ Proof.
   (* This is a definition from the library *)
   exact (make_iscontr t (λ p : P, pred_con p t)).
   (* iscontraprop1inv is a theorem in the library,
-  which allowed me to prove this theorem in a more elegant way.
+  which allowed me to prove this theorem in an elegant way.
   *)
   apply iscontraprop1inv.
   assumption.
@@ -141,7 +140,7 @@ Proof.
     exact H.
 
   (*
-  There might be a way to prove this in a simpler way,
+  There might be a simpler way to prove this,
   without functional extensionality. But I am not 100% sure.
   *)
 Defined.
